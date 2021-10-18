@@ -1,12 +1,18 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class TimerService {
 
     private countdownTimerRef: any = null;
-    public countdown = 0;
     public paused = true;
     private init = 0;
+    public countdownEndSource: Subject<void> = new Subject<void>();
+    public countdownEnd$: Observable<void> = this.countdownEndSource.asObservable();
+    public countdownSource: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    public countdown$: Observable<number> = this.countdownSource.asObservable();
 
     constructor() {
     }
@@ -17,14 +23,14 @@ export class TimerService {
     }
 
     restartCountdown(init?) {
+        console.log('restart countdown');
         if (init) {
             this.init = init;
         }
         if (this.init && this.init > 0) {
             this.paused = true;
             this.clearTimeout();
-            this.countdown = this.init;
-            // this.doCountdown();
+            this.countdownSource.next(this.init);
         }
     }
 
@@ -40,17 +46,18 @@ export class TimerService {
 
     private doCountdown() {
         this.countdownTimerRef = setTimeout(() => {
-            this.countdown = this.countdown - 1;
+            this.countdownSource.next(this.countdownSource.getValue() - 1);
             this.processCountdown();
         }, 1000);
     }
 
     private processCountdown() {
-        // tslint:disable-next-line:triple-equals
-        if (this.countdown == 0) {
-            // this.onComplete.emit();
-            console.log('--countdown end--');
+        console.log('process countdown');
+        if (this.countdownSource.getValue() <= 0) {
+            console.log('one');
+            this.countdownEndSource.next();
         } else {
+            console.log('two');
             this.doCountdown();
         }
     }
