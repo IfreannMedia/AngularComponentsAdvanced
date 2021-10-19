@@ -11,6 +11,8 @@ import {AlertViewComponent} from './alert-view/alert-view.component';
 import {TabsComponent} from './tabs/tabs.component';
 import {TabComponent} from './tab/tab.component';
 import {SimpleAlertViewComponent} from './simple-alert-view/simple-alert-view.component';
+import {TimerNativeComponent} from './timer-native/timer-native.component';
+import {TimerNoneComponent} from './timer-none/timer-none.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import {SimpleAlertViewComponent} from './simple-alert-view/simple-alert-view.co
         AlertViewComponent,
         TabsComponent,
         TabComponent,
-        SimpleAlertViewComponent
+        SimpleAlertViewComponent,
+        TimerNativeComponent,
+        TimerNoneComponent
     ],
     imports: [
         BrowserModule,
