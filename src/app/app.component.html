@@ -1,5 +1,12 @@
 <div>
-    <h1>Timers</h1>
+    <app-tabs>
+        <app-tab title="Timers"></app-tab>
+        <app-tab title="Crono"></app-tab>
+        <app-tab title="Alarm"></app-tab>
+    </app-tabs>
+
+
+
     <app-timer *ngFor="let timer of timers;" init="{{timer}}" (onComplete)="setIsEndTimerAlertVisible(true)"></app-timer>
 
     <button class="add" (click)="showAddTimer()">+</button>
