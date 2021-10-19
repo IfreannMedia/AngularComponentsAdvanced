@@ -8,11 +8,12 @@ import {Component} from '@angular/core';
 export class AppComponent {
 
     public isAddTimerVisible = false;
+    public isEndTimerAlertVisible = false;
     public time = 0;
     public timers: Array<number> = [];
 
     constructor() {
-        this.timers = [3, 20, 180];
+        this.timers = [3, 3, 180];
     }
 
     showAddTimer() {
@@ -21,6 +22,10 @@ export class AppComponent {
 
     hideAddTimer() {
         this.isAddTimerVisible = false;
+    }
+
+    public setIsEndTimerAlertVisible(visible: boolean): void {
+        this.isEndTimerAlertVisible = visible;
     }
 
     public submitAddTimer() {
