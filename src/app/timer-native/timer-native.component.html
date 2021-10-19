@@ -6,6 +6,6 @@
     <div class="buttons">
         <button *ngIf="timerService.paused" (click)="timerService.toggleCountdown()">PLAY</button>
         <button *ngIf="!timerService.paused" (click)="timerService.toggleCountdown()">PAUSE</button>
-        <button (click)="timerService.restartCountdown()">RESTART</button>
+        <button (click)="timerService.restartCountdown()">RESET</button>
     </div>
 </div>
