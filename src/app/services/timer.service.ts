@@ -23,7 +23,6 @@ export class TimerService {
     }
 
     restartCountdown(init?) {
-        console.log('restart countdown');
         if (init) {
             this.init = init;
         }

@@ -1,17 +1,20 @@
 <div>
     <app-tabs>
-        <app-tab title="Timers"></app-tab>
-        <app-tab title="Crono"></app-tab>
-        <app-tab title="Alarm"></app-tab>
+        <app-tab title="Timers">
+            <app-timer *ngFor="let timer of timers;" init="{{timer}}"
+                       (onComplete)="setIsEndTimerAlertVisible(true)"></app-timer>
+
+            <button class="add" (click)="showAddTimer()">+</button>
+        </app-tab>
+        <app-tab title="Crono">
+            Crono. Not available.
+        </app-tab>
+        <app-tab title="Alarm">
+            Alarm. Not available.
+        </app-tab>
     </app-tabs>
 
-
-
-    <app-timer *ngFor="let timer of timers;" init="{{timer}}" (onComplete)="setIsEndTimerAlertVisible(true)"></app-timer>
-
-    <button class="add" (click)="showAddTimer()">+</button>
-
-<!--    dialogue to add new timers -->
+    <!--    dialogue to add new timers -->
     <app-alert-view [hidden]="!isAddTimerVisible">
         <div class="header">
             Add new timer
@@ -27,7 +30,7 @@
 
     </app-alert-view>
 
-<!--  end timer alert  -->
+    <!--  end timer alert  -->
     <app-alert-view [hidden]="!isEndTimerAlertVisible">
         <div class="header">
             Timer Ended
