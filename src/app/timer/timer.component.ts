@@ -12,11 +12,17 @@ export class TimerComponent implements OnInit, OnDestroy {
 
     @Output() onComplete = new EventEmitter<void>();
     @Input() init = 20;
+    private countdown = 0;
     private subscriptions: Subscription[] = [];
 
     // the TimerComponent is a stateful component and interfaces with the TimerService
     // where the actual logic of the handling the Timer Data is offloaded
     constructor(public timerService: TimerService) {
+    }
+
+    // replaced async pipe with this getter
+    get progress() {
+        return (this.init - this.countdown) / this.init * 100;
     }
 
     ngOnInit(): void {
@@ -25,7 +31,10 @@ export class TimerComponent implements OnInit, OnDestroy {
             console.log('hoorey, countdown ended');
             this.onComplete.emit();
         });
-        this.subscriptions.push(sub);
+        const sub2 = this.timerService.countdown$.subscribe((countDown) => {
+            this.countdown = countDown;
+        });
+        this.subscriptions.push(...[sub, sub2]);
     }
 
     ngOnDestroy(): void {
