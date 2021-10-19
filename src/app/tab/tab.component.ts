@@ -18,7 +18,6 @@ export class TabComponent implements OnInit, Tab {
 
     ngOnInit() {
         // add self to parent tabs
-        console.log('this: ', this, 'tabsComponent: ', this.tabs);
         this.tabs.addTab(this);
     }
 
