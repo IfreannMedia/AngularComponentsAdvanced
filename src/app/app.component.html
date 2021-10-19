@@ -1,7 +1,25 @@
 <div>
-  <h1>Timers</h1>
-  <app-timer init="80"></app-timer>
-<!--  cannot be used because ViewEncapsulation.Native throws errors -->
-<!--  <app-timer-native init="5"></app-timer-native>-->
-  <app-timer-none init="300"></app-timer-none>
+    <h1>Timers</h1>
+    <app-timer init="80"></app-timer>
+    <!--  cannot be used because ViewEncapsulation.Native throws errors -->
+    <!--  <app-timer-native init="5"></app-timer-native>-->
+    <app-timer init="5"></app-timer>
+    <app-timer-none init="300"></app-timer-none>
+
+    <button class="add" (click)="showAddTimer()">+</button>
+
+    <app-alert-view [hidden]="!isAddTimerVisible">
+        <div class="header">
+            Add new timer
+        </div>
+
+        <label>Set the number of seconds for your timer</label>
+        <input [(ngModel)]="time" type="number">
+
+        <div class="footer-content">
+            <button (click)="hideAddTimer()" class="cancel-button">Cancel</button>
+            <button >Ok</button>
+        </div>
+
+    </app-alert-view>
 </div>
