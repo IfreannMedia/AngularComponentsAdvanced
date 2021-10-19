@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Tab} from './tab.interface';
-import {TabsComponent} from '../tabs/tabs.component';
 
 @Component({
     selector: 'app-tab',
@@ -10,15 +9,17 @@ import {TabsComponent} from '../tabs/tabs.component';
 export class TabComponent implements OnInit, Tab {
 
     @Input() title: string;
+    @Output() onClick: EventEmitter<void> = new EventEmitter<void>();
     public isActive = false;
 
-    // use DI to access the parent tabs component
-    constructor(public tabs: TabsComponent) {
+    constructor() {
     }
 
     ngOnInit() {
-        // add self to parent tabs
-        this.tabs.addTab(this);
+    }
+
+    public clickTabContent(): void {
+        this.onClick.emit();
     }
 
 }
