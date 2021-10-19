@@ -45,7 +45,8 @@ export class TimerService {
 
     private doCountdown() {
         this.countdownTimerRef = setTimeout(() => {
-            this.countdownSource.next(this.countdownSource.getValue() - 1);
+            const nextValue = this.countdownSource.getValue() - 1;
+            this.countdownSource.next(nextValue >= 0 ? nextValue : 0);
             this.processCountdown();
         }, 1000);
     }
