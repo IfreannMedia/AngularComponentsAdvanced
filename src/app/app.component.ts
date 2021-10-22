@@ -1,43 +1,57 @@
-import {AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, QueryList, ViewChildren} from '@angular/core';
+import {
+    AfterContentInit,
+    AfterViewInit,
+    Component,
+    ComponentFactoryResolver,
+    ComponentRef,
+    ElementRef,
+    OnDestroy,
+    Renderer2,
+    ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 import {SimpleAlertViewComponent} from './simple-alert-view/simple-alert-view.component';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterContentInit, AfterViewInit {
+export class AppComponent implements AfterContentInit, AfterViewInit, OnDestroy {
 
     public isAddTimerVisible = false;
     public isEndTimerAlertVisible = false;
-    public time = 0;
+    public time: number = null;
     public timers: Array<number> = [];
+    public simpleAlert: ComponentRef<SimpleAlertViewComponent> = null;
+    private timerEndSubscription: Subscription;
+    @ViewChild('timerInput') timeInput: ElementRef;
+    @ViewChild('alert', {read: ViewContainerRef}) alertContainer: ViewContainerRef;
 
-    @ViewChildren(SimpleAlertViewComponent) alerts: QueryList<SimpleAlertViewComponent>;
-
-    constructor(private changeDetRef: ChangeDetectorRef) {
+    constructor(private renderer: Renderer2,
+                private resolver: ComponentFactoryResolver) {
         this.timers = [3, 3, 180];
     }
 
     ngAfterViewInit() {
-        this.alerts.forEach(alert => {
-            if (!alert.title) {
-                alert.title = 'yo';
-                alert.message = 'american dad';
-            }
-            alert.show();
-        });
-        this.changeDetRef.detectChanges();
+        this.renderer.setAttribute(this.timeInput.nativeElement, 'placeholder', 'enter seconds');
+        this.renderer.addClass(this.timeInput.nativeElement, 'time-in');
     }
 
     ngAfterContentInit() {
-        // this.alerts.show();
-        // this.alerts.title = 'i am a title';
-        // this.alerts.message = 'i am a message';
+
+    }
+
+    ngOnDestroy() {
+        if (this.timerEndSubscription) {
+            this.timerEndSubscription.unsubscribe();
+        }
     }
 
     showAddTimer() {
         this.isAddTimerVisible = true;
+        setTimeout(() => this.renderer.selectRootElement(this.timeInput.nativeElement).focus());
     }
 
     hideAddTimer() {
@@ -47,11 +61,26 @@ export class AppComponent implements AfterContentInit, AfterViewInit {
     public setIsEndTimerAlertVisible(visible: boolean): void {
         this.isEndTimerAlertVisible = visible;
         if (visible) {
-            this.alerts.first.show();
+            this.configureSimpleTimerEndAlertComponent();
+            this.subscribeToTimerEndDismiss();
+            this.simpleAlert.instance.show();
         }
     }
 
     public submitAddTimer() {
         this.timers.push(this.time);
+    }
+
+    private configureSimpleTimerEndAlertComponent() {
+        const alertFactory = this.resolver.resolveComponentFactory(SimpleAlertViewComponent);
+        this.simpleAlert = this.alertContainer.createComponent(alertFactory);
+        this.simpleAlert.instance.title = 'Timer has ended';
+        this.simpleAlert.instance.message = 'You may now go in peace';
+    }
+
+    private subscribeToTimerEndDismiss() {
+        if (!this.timerEndSubscription) {
+            this.timerEndSubscription = this.simpleAlert.instance.onDismiss.subscribe(() => this.simpleAlert.destroy());
+        }
     }
 }

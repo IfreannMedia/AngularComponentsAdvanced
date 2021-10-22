@@ -33,6 +33,7 @@ import {TimerNoneComponent} from './timer-none/timer-none.component';
         FormsModule,
         HttpModule
     ],
+    entryComponents: [SimpleAlertViewComponent],
     providers: [],
     bootstrap: [AppComponent]
 })

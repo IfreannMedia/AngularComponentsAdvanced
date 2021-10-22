@@ -21,7 +21,7 @@
         </div>
 
         <label>Set the number of seconds for your timer</label>
-        <input [(ngModel)]="time" type="number">
+        <input [(ngModel)]="time" type="number" #timerInput>
 
         <div class="footer-content">
             <button (click)="hideAddTimer()" class="cancel-button">Cancel</button>
@@ -30,19 +30,5 @@
 
     </app-alert-view>
 
-    <!--  end timer alert  -->
-<!--    <app-alert-view [hidden]="!isEndTimerAlertVisible">-->
-<!--        <div class="header">-->
-<!--            Timer Ended-->
-<!--        </div>-->
-
-<!--        <div>Your countdown has finished</div>-->
-
-<!--        <div class="footer-content">-->
-<!--            <button (click)="setIsEndTimerAlertVisible(false)">Ok</button>-->
-<!--        </div>-->
-<!--    </app-alert-view>-->
-
-    <app-simple-alert-view title="Timer ended" message="your timer has ended, you may now go in peace"></app-simple-alert-view>
-    <app-simple-alert-view></app-simple-alert-view>
+    <ng-container #alert></ng-container>
 </div>
