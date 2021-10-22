@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import {TimerService} from '../services/timer.service';
 import {Subscription} from 'rxjs/Subscription';
+import {ComponentWithSubscriptions} from '../base-component-classes/ComponentWithSubscriptions';
 
 @Component({
     selector: 'app-timer-none',
@@ -20,17 +21,17 @@ import {Subscription} from 'rxjs/Subscription';
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class TimerNoneComponent implements OnInit, OnDestroy {
+export class TimerNoneComponent extends ComponentWithSubscriptions implements OnInit, OnDestroy {
 
     @Output() onComplete = new EventEmitter<void>();
     @Input() init = 20;
-    private countdown = 0;
-    private subscriptions: Subscription[] = [];
+    public countdown = 0;
 
     // the TimerComponent is a stateful component and interfaces with the TimerService
     // where the actual logic of the handling the Timer Data is offloaded
     constructor(public timerService: TimerService,
                 private changeDetRef: ChangeDetectorRef) {
+        super();
     }
 
     // replaced async pipe with this getter
@@ -52,7 +53,7 @@ export class TimerNoneComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscriptions.forEach(sub => sub.unsubscribe());
+        super.ngOnDestroy();
         this.timerService.destroy();
     }
 

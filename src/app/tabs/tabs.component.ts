@@ -1,7 +1,7 @@
-import {AfterContentInit, Component, ContentChildren, OnDestroy, OnInit, QueryList} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
 import {Tab} from '../tab/tab.interface';
 import {TabComponent} from '../tab/tab.component';
-import {Subscription} from 'rxjs/Subscription';
+import {ComponentWithSubscriptions} from '../base-component-classes/ComponentWithSubscriptions';
 
 
 @Component({
@@ -9,16 +9,13 @@ import {Subscription} from 'rxjs/Subscription';
     templateUrl: './tabs.component.html',
     styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent implements OnInit, AfterContentInit, OnDestroy {
+export class TabsComponent extends ComponentWithSubscriptions implements AfterContentInit {
 
     // access the (projected) child content
     @ContentChildren(TabComponent) public tabs: QueryList<TabComponent>;
-    private subscriptions: Subscription[] = [];
 
     constructor() {
-    }
-
-    ngOnInit() {
+        super();
     }
 
     ngAfterContentInit(): void {
@@ -31,14 +28,9 @@ export class TabsComponent implements OnInit, AfterContentInit, OnDestroy {
         this.selectTab(this.tabs.first);
     }
 
-    ngOnDestroy() {
-        this.subscriptions.forEach(s => s.unsubscribe());
-    }
-
     public selectTab(tab: Tab) {
         this.tabs.forEach(t => t.isActive = false);
         tab.isActive = true;
     }
-
 
 }
